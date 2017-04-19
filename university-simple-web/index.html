@@ -1,0 +1,200 @@
+<!doctype html>
+<html ng-app="ngApp" >
+<head>
+  
+  <meta charset="utf-8">
+  <title>University XY</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <!-- <script src="js/utils.js"></script> -->
+  
+  <script>
+  angular.module('ngApp', [])
+  .controller('controller', function($scope, $http, utils) {
+    
+    var ALUNO_ENDPOINT = "http://localhost:8080/aluno";
+    var CURSO_ENDPOINT = "http://localhost:8080/curso";
+    
+    $scope.init = function(){
+      $http.get(ALUNO_ENDPOINT).then(function mySucces(response) {
+        $scope.alunos = response.data;
+      }, function myError(response) {
+        alert('Erro');
+      });
+      
+      $http.get(CURSO_ENDPOINT).then(function mySucces(response) {
+        $scope.cursos = response.data;
+      }, function myError(response) {
+        alert('Erro');
+      });
+    }
+
+    
+    $scope.cadastraNovo = function(aluno){
+      
+      $http.post(ALUNO_ENDPOINT, aluno).then(function mySucces(response) {
+        alert('sucesso');
+        $scope.init();
+      }, function myError(response) {
+        alert('Erro');
+      });
+      
+    }
+    
+    $scope.deletar = function(index){
+      $http.delete(ALUNO_ENDPOINT, angular.copy($scope.alunos[index])).then(function mySucces(response) {
+        alert('sucesso');
+        $scope.init();
+      }, function myError(response) {
+        alert('Erro');
+      });
+      
+    }
+    
+    $scope.editar = function(aluno){
+      $scope.alunoEdit = aluno;
+    }
+    
+    
+  })
+  .factory('utils',[ function() {
+    
+    return{
+      validaCpf:function(cpf){
+        var numeros, digitos, soma, i, resultado, digitos_iguais;
+        digitos_iguais = 1;
+        if (cpf.length < 11)
+        return true;
+        for (i = 0; i < cpf.length - 1; i++)
+        if (cpf.charAt(i) != cpf.charAt(i + 1))
+        {
+          digitos_iguais = 0;
+          break;
+        }
+        if (!digitos_iguais){
+          numeros = cpf.substring(0,9);
+          digitos = cpf.substring(9);
+          soma = 0;
+          for (i = 10; i > 1; i--)
+          soma += numeros.charAt(10 - i) * i;
+          resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+          if (resultado != digitos.charAt(0))
+          return true;
+          numeros = cpf.substring(0,10);
+          soma = 0;
+          for (i = 11; i > 1; i--)
+          soma += numeros.charAt(11 - i) * i;
+          resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+          if (resultado != digitos.charAt(1))
+          return true;
+          return false;
+        }else
+        return true;
+      }
+      
+    };
+    
+  }]);
+  </script>
+</head>
+<body ng-controller="controller">
+  <div ng-init="init()">
+    <div class="jumbotron">
+      <h1>Welcome to University XY<h1>
+      </div>
+      
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Novo Aluno</button>
+      <hr>
+      <div class = "row">
+        <div class="col-md-3" ng-show="alunos.length > 0">
+          <label for="filtro">Filtro</label>  
+          <input type="text" name="filtro" class="form-control input-sm" style="margin-top: 5px" ng-model="filtro" />
+        </div>
+      </div>
+      <hr>
+      <div>
+        <table class="table table-bordered table-hover" id="tabelaAluno" ng-show="alunos.length > 0">
+          <thead>
+            <tr>
+              <th class="text-center">Matricula</th>
+              <th class="text-center">Nome</th>
+              <th class="text-center">CPF</th>
+              <th class="text-center">Ações</th> 
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="aluno in result = (alunos | filter:filtro)">
+              <td title="Matricula" class="text-center">
+                <span>{{aluno.id.matricula}}</span>
+              </td>
+              <td title="Nome" class="text-center">
+                <span>{{aluno.nome | date}}</span>
+              </td>
+              <td title="CPF" class="text-center">
+                <span>{{aluno.id.cpf}}</span>
+              </td>
+              <td title="Ações" class="text-center">
+                <a class="btn btn-sm btn-primary" ng-click="" href=''>
+                  <i class="glyphicon glyphicon-pencil"></i>
+                </a>
+                <a class="btn btn-sm btn-danger" ng-click="deletar($index)" href=''>
+                  <i class="glyphicon glyphicon-trash"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div> 
+    </div>
+    
+    
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Cadastro de Aluno</h4>
+          </div>
+          <form name="contatoForm" ng-submit="cadastraNovo(aluno)">
+            
+            <div class="modal-body">
+              <fieldset>
+                <div class="row" >
+                  <div class="form-group col-sm-6">
+                    <label for="nome">Nome</label>  
+                    <input id="nome" type="text" class="form-control" name="nome" maxlength="60" required placeholder="Nome" ng-model="aluno.nome">
+                  </div>
+                </div>
+                <div class="row" >
+                  <div class="form-group col-sm-4">
+                    <label for="cpf">CPF</label>  
+                    <input id="cpf" type="text" class="form-control" name="cpf" maxlength="12" required placeholder="CPF" ng-model="aluno.id.cpf">
+                  </div>
+                  <div class="form-group col-sm-4">
+                    <label for="matricula">Matricula</label>  
+                    <input id="matricula" type="text" class="form-control" name="matricula" maxlength="20" required placeholder="Matricula" ng-model="aluno.id.matricula">
+                  </div>
+                </div>
+                <div class="row" >
+                  <div class="form-group col-sm-4">
+                    <label for="curso">Curso <label class="cor-label-obrigatorio">*</label></label>
+                    <select id="curso" name="curso" class="form-control input-sm" type="text" required ng-options="curso.id as curso.nome for curso in cursos track by curso.id" ng-model="aluno.cursoId"> </select>
+                  </div>
+                </div>
+              </fieldset> 
+              
+            </div>
+            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+              <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div>
+    </div>
+    
+  </body>
+  </html>
