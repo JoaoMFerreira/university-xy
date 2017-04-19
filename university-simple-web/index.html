@@ -36,15 +36,17 @@
       
       $http.post(ALUNO_ENDPOINT, aluno).then(function mySucces(response) {
         alert('sucesso');
+        $scope.aluno = {};
         $scope.init();
+        $('#myModal').modal('hide');
       }, function myError(response) {
         alert('Erro');
       });
       
     }
     
-    $scope.deletar = function(index){
-      $http.delete(ALUNO_ENDPOINT, angular.copy($scope.alunos[index])).then(function mySucces(response) {
+    $scope.deletar = function(id){
+      $http.delete(ALUNO_ENDPOINT + "/" +id.cpf + "/" + id.matricula ).then(function mySucces(response) {
         alert('sucesso');
         $scope.init();
       }, function myError(response) {
@@ -114,7 +116,7 @@
         </div>
       </div>
       <hr>
-      <div>
+      <div class="panel panel-default">
         <table class="table table-bordered table-hover" id="tabelaAluno" ng-show="alunos.length > 0">
           <thead>
             <tr>
@@ -139,7 +141,7 @@
                 <a class="btn btn-sm btn-primary" ng-click="" href=''>
                   <i class="glyphicon glyphicon-pencil"></i>
                 </a>
-                <a class="btn btn-sm btn-danger" ng-click="deletar($index)" href=''>
+                <a class="btn btn-sm btn-danger" ng-click="deletar(aluno.id)" href=''>
                   <i class="glyphicon glyphicon-trash"></i>
                 </a>
               </td>
@@ -150,7 +152,7 @@
     </div>
     
     
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div id="MyModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" >
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">

@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.xy.api.IGenericService;
 
 public abstract class GenericService<T extends BaseEntity<ID>, ID extends Serializable> implements IGenericService<T, ID>{
@@ -25,7 +24,7 @@ public abstract class GenericService<T extends BaseEntity<ID>, ID extends Serial
 		return this.genericRepository.findAll();
 	}
 	@Override
-	public T insert(@RequestBody T entityObject) {
+	public T insert(T entityObject) {
 		if (this.LOGGER.isDebugEnabled()) {
 			this.LOGGER.debug(String.format("Saving the entity [%s].", entityObject));
 		}
@@ -33,7 +32,7 @@ public abstract class GenericService<T extends BaseEntity<ID>, ID extends Serial
 		return this.genericRepository.save(entityObject);
 	}
 	@Override
-	public void update(@RequestBody T entityObject) {
+	public void update(T entityObject) {
 		this.LOGGER.debug(String.format("Request to update the record [%s].", entityObject));
 
 		if (entityObject.getId() == null) {
@@ -45,10 +44,16 @@ public abstract class GenericService<T extends BaseEntity<ID>, ID extends Serial
 		this.genericRepository.save(entityObject);
 	}
 	@Override
-	public void delete(@RequestBody T entityObject) {
+	public void delete(T entityObject) {
 		this.LOGGER.debug(String.format("Request to delete the record [%s].", entityObject));
 
 		this.genericRepository.delete(entityObject);
 	}
 
+	@Override
+	public void delete(ID id) {
+		this.LOGGER.debug(String.format("Request to delete the record [%s].", id));
+
+		this.genericRepository.delete(id);
+	}
 }

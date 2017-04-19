@@ -14,5 +14,7 @@ public interface IGenericService <T extends BaseEntity<ID>, ID extends Serializa
 	void update(T entityObject);
 
 	void delete(T entityObject);
+	
+	void delete(ID id);
 
 }

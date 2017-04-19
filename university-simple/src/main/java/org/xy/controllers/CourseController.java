@@ -8,6 +8,12 @@ import org.xy.util.GenericController;
 
 @RestController
 @RequestMapping("/curso")
-public class CourseController extends GenericController<CourseEntity, Long>implements ICourseController{
+public class CourseController extends GenericController<CourseEntity, Long> implements ICourseController {
+
+	@Override
+	public void delete(Long id) {
+
+		this.genericService.delete(id);
+	}
 
 }

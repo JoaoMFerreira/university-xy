@@ -24,6 +24,18 @@ public class StudentKey extends BaseKey {
 	@Column(name = "MATRICULA", length = 20, nullable = false)
 	private String matricula;
 
+	public StudentKey() {
+ 
+	}
+	
+	public StudentKey(Long cpf, String matricula) {
+		super();
+		this.cpf = cpf;
+		this.matricula = matricula;
+	}
+
+
+
 	public Long getCpf() {
 		return cpf;
 	}
