@@ -1,0 +1,94 @@
+<div ng-controller="alunoCtrl">
+  
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Novo Aluno</button>
+  <hr>
+  <div class = "row">
+    <div class="col-md-3" ng-show="alunos.length > 0">
+      <label for="filtro">Filtro</label>  
+      <input type="text" name="filtro" class="form-control input-sm" style="margin-top: 5px" ng-model="filtro" />
+    </div>
+  </div>
+  <hr>
+  <div class="panel panel-default">
+    <table class="table table-bordered table-hover" id="tabelaAluno" ng-show="alunos.length > 0">
+      <thead>
+        <tr>
+          <th class="text-center">Matricula</th>
+          <th class="text-center">Nome</th>
+          <th class="text-center">CPF</th>
+          <th class="text-center">Ações</th> 
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="aluno in result = (alunos | filter:filtro)">
+          <td title="Matricula" class="text-center">
+            <span>{{aluno.id.matricula}}</span>
+          </td>
+          <td title="Nome" class="text-center">
+            <span>{{aluno.nome | date}}</span>
+          </td>
+          <td title="CPF" class="text-center">
+            <span>{{aluno.id.cpf}}</span>
+          </td>
+          <td title="Ações" class="text-center">
+            <a class="btn btn-sm btn-primary" ng-click="" href=''>
+              <i class="glyphicon glyphicon-pencil"></i>
+            </a>
+            <a class="btn btn-sm btn-danger" ng-click="deletar(aluno.id)" href=''>
+              <i class="glyphicon glyphicon-trash"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div> 
+</div>
+
+
+<div id="MyModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" >
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Cadastro de Aluno</h4>
+      </div>
+      <form name="contatoForm" ng-submit="cadastraNovo(aluno)">
+        
+        <div class="modal-body">
+          <fieldset>
+            <div class="row" >
+              <div class="form-group col-sm-6">
+                <label for="nome">Nome</label>  
+                <input id="nome" type="text" class="form-control" name="nome" maxlength="60" required placeholder="Nome" ng-model="aluno.nome">
+              </div>
+            </div>
+            <div class="row" >
+              <div class="form-group col-sm-4">
+                <label for="cpf">CPF</label>  
+                <input id="cpf" type="text" class="form-control" name="cpf" maxlength="12" required placeholder="CPF" ng-model="aluno.id.cpf">
+              </div>
+              <div class="form-group col-sm-4">
+                <label for="matricula">Matricula</label>  
+                <input id="matricula" type="text" class="form-control" name="matricula" maxlength="20" required placeholder="Matricula" ng-model="aluno.id.matricula">
+              </div>
+            </div>
+            <div class="row" >
+              <div class="form-group col-sm-4">
+                <label for="curso">Curso <label class="cor-label-obrigatorio">*</label></label>
+                <select id="curso" name="curso" class="form-control input-sm" type="text" required ng-options="curso.id as curso.nome for curso in cursos track by curso.id" ng-model="aluno.cursoId"> </select>
+              </div>
+            </div>
+          </fieldset> 
+          
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div>
+</div>
+  
+</div>
