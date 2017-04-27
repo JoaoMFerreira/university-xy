@@ -1,10 +1,10 @@
-<div ng-controller="alunoCtrl">
-  
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Novo Aluno</button>
+<div ng-controller="alunoCtrl" ng-init="getAlunos()">
+
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#MyModal">Novo Aluno</button>
   <hr>
   <div class = "row">
     <div class="col-md-3" ng-show="alunos.length > 0">
-      <label for="filtro">Filtro</label>  
+      <label for="filtro">Filtro</label>
       <input type="text" name="filtro" class="form-control input-sm" style="margin-top: 5px" ng-model="filtro" />
     </div>
   </div>
@@ -16,7 +16,7 @@
           <th class="text-center">Matricula</th>
           <th class="text-center">Nome</th>
           <th class="text-center">CPF</th>
-          <th class="text-center">Ações</th> 
+          <th class="text-center">Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -34,14 +34,14 @@
             <a class="btn btn-sm btn-primary" ng-click="" href=''>
               <i class="glyphicon glyphicon-pencil"></i>
             </a>
-            <a class="btn btn-sm btn-danger" ng-click="deletar(aluno.id)" href=''>
+            <a class="btn btn-sm btn-danger" ng-click="deletar(aluno)" href=''>
               <i class="glyphicon glyphicon-trash"></i>
             </a>
           </td>
         </tr>
       </tbody>
     </table>
-  </div> 
+  </div>
 </div>
 
 
@@ -53,35 +53,35 @@
         <h4 class="modal-title">Cadastro de Aluno</h4>
       </div>
       <form name="contatoForm" ng-submit="cadastraNovo(aluno)">
-        
+
         <div class="modal-body">
           <fieldset>
             <div class="row" >
               <div class="form-group col-sm-6">
-                <label for="nome">Nome</label>  
-                <input id="nome" type="text" class="form-control" name="nome" maxlength="60" required placeholder="Nome" ng-model="aluno.nome">
+                <label for="nome">Nome</label>
+                <input id="nome" type="text" class="form-control" name="nome" maxlength="60" required placeholder="Nome" ng-disabled="isUpdate" ng-model="aluno.nome">
               </div>
             </div>
             <div class="row" >
               <div class="form-group col-sm-4">
-                <label for="cpf">CPF</label>  
-                <input id="cpf" type="text" class="form-control" name="cpf" maxlength="12" required placeholder="CPF" ng-model="aluno.id.cpf">
+                <label for="cpf">CPF</label>
+                <input id="cpf" type="text" class="form-control" name="cpf" maxlength="12" required placeholder="CPF" ng-disabled="isUpdate" ng-model="aluno.id.cpf">
               </div>
               <div class="form-group col-sm-4">
-                <label for="matricula">Matricula</label>  
+                <label for="matricula">Matricula</label>
                 <input id="matricula" type="text" class="form-control" name="matricula" maxlength="20" required placeholder="Matricula" ng-model="aluno.id.matricula">
               </div>
             </div>
             <div class="row" >
               <div class="form-group col-sm-4">
                 <label for="curso">Curso <label class="cor-label-obrigatorio">*</label></label>
-                <select id="curso" name="curso" class="form-control input-sm" type="text" required ng-options="curso.id as curso.nome for curso in cursos track by curso.id" ng-model="aluno.cursoId"> </select>
+                <select id="curso" name="curso" class="form-control input-sm" type="text" required ng-options="curso as curso.nome for curso in cursos track by curso.id" ng-model="aluno.cursoId"> </select>
               </div>
             </div>
-          </fieldset> 
-          
+          </fieldset>
+
         </div>
-        
+
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
           <button type="submit" class="btn btn-primary">Salvar</button>
@@ -90,5 +90,5 @@
     </div><!-- /.modal-content -->
   </div>
 </div>
-  
+
 </div>

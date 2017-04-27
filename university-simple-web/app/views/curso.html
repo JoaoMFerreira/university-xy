@@ -1,0 +1,72 @@
+<div ng-controller="cursoCtrl" ng-init="getCursos()">
+
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#MyModalCursos">Novo Curso</button>
+  <hr>
+  <div class = "row">
+    <div class="col-md-3" ng-show="cursos.length > 0">
+      <label for="filtro">Filtro</label>
+      <input type="text" name="filtro" class="form-control input-sm" style="margin-top: 5px" ng-model="filtro" />
+    </div>
+  </div>
+  <hr>
+  <div class="panel panel-default">
+    <table class="table table-bordered table-hover" id="tabelaAluno" ng-show="cursos.length > 0">
+      <thead>
+        <tr>
+          <th class="text-center">Id</th>
+          <th class="text-center">Nome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="curso in result = (cursos | filter:filtro)">
+          <td title="Id" class="text-center">
+            <span>{{curso.id}}</span>
+          </td>
+          <td title="Nome" class="text-center">
+            <span>{{curso.nome | date}}</span>
+          </td>
+          <td title="Ações" class="text-center">
+            <a class="btn btn-sm btn-primary" ng-click="editar(curso)" href=''>
+              <i class="glyphicon glyphicon-pencil"></i>
+            </a>
+            <a class="btn btn-sm btn-danger" ng-click="deletarCurso(curso.id)" href=''>
+              <i class="glyphicon glyphicon-trash"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="MyModalCursos" class="modal fade " tabindex="-1" role="dialog" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Cadastro de Curso</h4>
+      </div>
+      <form name="cursoForm" ng-submit="cadastrarCurso(curso)">
+
+        <div class="modal-body">
+          <fieldset>
+            <div class="row" >
+              <div class="form-group col-sm-6">
+                <label for="nome">Nome</label>
+                <input id="nomecurso" type="text" class="form-control" name="nome" maxlength="60" required placeholder="Nome" ng-disabled="isUpdate" ng-model="curso.nome">
+              </div>
+            </div>
+          </fieldset>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div>
+</div>
+
+</div>
