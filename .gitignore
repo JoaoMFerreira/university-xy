@@ -22,7 +22,8 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-
+node_modules/
+gulpfile.js
 ### Eclipse ###
 
 .metadata
